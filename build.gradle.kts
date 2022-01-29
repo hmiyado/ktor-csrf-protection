@@ -4,6 +4,7 @@ import java.util.*
 
 plugins {
     kotlin("jvm") version "1.6.10"
+    id("org.jetbrains.dokka") version "1.6.10"
     `maven-publish`
     signing
 }
@@ -29,24 +30,18 @@ tasks {
     test {
         useJUnitPlatform()
     }
-
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets.main.get().allSource)
-    }
-
-    val javadocJar by creating(Jar::class) {
-        dependsOn.add(javadoc)
-        archiveClassifier.set("javadoc")
-        from(javadoc)
-    }
-
-    artifacts {
-        archives(sourcesJar)
-        archives(javadocJar)
-        archives(jar)
-    }
 }
+val sourcesJar by tasks.creating(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+val javadocJar by tasks.creating(Jar::class) {
+    dependsOn.add(tasks.dokkaJavadoc)
+    archiveClassifier.set("javadoc")
+    from(tasks.dokkaJavadoc)
+}
+
 
 dependencies {
     val ktorVersion = "1.6.7"
@@ -66,6 +61,8 @@ publishing {
             artifactId = "ktor-csrf-protection"
 
             from(components["java"])
+            artifact(sourcesJar)
+            artifact(javadocJar)
 
             pom {
                 name.set("Ktor Csrf Protection")
