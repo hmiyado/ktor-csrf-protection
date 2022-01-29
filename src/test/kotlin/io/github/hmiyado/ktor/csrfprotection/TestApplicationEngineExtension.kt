@@ -1,4 +1,4 @@
-package com.github.hmiyado.csrfprotection
+package io.github.hmiyado.ktor.csrfprotection
 
 import io.ktor.http.HttpMethod
 import io.ktor.server.testing.TestApplicationEngine

@@ -1,4 +1,4 @@
-package com.github.hmiyado.csrfprotection
+package io.github.hmiyado.ktor.csrfprotection
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

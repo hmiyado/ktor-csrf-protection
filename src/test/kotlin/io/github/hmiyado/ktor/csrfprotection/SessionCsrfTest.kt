@@ -1,4 +1,4 @@
-package com.github.hmiyado.csrfprotection
+package io.github.hmiyado.ktor.csrfprotection
 
 import io.kotest.assertions.ktor.shouldHaveStatus
 import io.kotest.core.spec.style.DescribeSpec

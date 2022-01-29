@@ -1,4 +1,4 @@
-package com.github.hmiyado.csrfprotection
+package io.github.hmiyado.ktor.csrfprotection
 
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.ApplicationFeature

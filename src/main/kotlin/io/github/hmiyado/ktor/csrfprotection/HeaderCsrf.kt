@@ -1,4 +1,4 @@
-package com.github.hmiyado.csrfprotection
+package io.github.hmiyado.ktor.csrfprotection
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
@@ -36,8 +36,7 @@ class HeaderCsrfProvider private constructor(
 inline fun Csrf.Configuration.header(
     configure: HeaderCsrfProvider.Configuration.() -> Unit,
 ) {
-    val provider = HeaderCsrfProvider
-        .Configuration()
+    val provider = HeaderCsrfProvider.Configuration()
         .apply(configure)
         .buildProvider()
 

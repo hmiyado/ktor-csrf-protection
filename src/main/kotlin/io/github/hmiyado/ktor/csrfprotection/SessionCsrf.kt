@@ -1,4 +1,4 @@
-package com.github.hmiyado.csrfprotection
+package io.github.hmiyado.ktor.csrfprotection
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
@@ -30,8 +30,7 @@ class SessionCsrfProvider private constructor(
 inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
     configure: SessionCsrfProvider.Configuration.() -> Unit,
 ) {
-    val provider = SessionCsrfProvider
-        .Configuration()
+    val provider = SessionCsrfProvider.Configuration()
         .apply(configure)
         .buildProvider()
     val logger = provider.logger
