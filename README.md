@@ -67,7 +67,7 @@ The full process is below.
 
 1. Request `POST /protected` without CSRF Token because client doesn't know it.
 2. Respond 403 Forbidden with `X-CSRF-Token: {token}` because client doesn't send valid csrf token.
-3. Request `POST /protected` without `X-CSRF-Token: {token}`. The token is get from the server response.
+3. Request `POST /protected` with `X-CSRF-Token: {token}`. The token is get from the server response.
 4. The request is accepted. 
 
 ## License
