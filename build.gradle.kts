@@ -13,7 +13,11 @@ group = "io.github.hmiyado"
 version = "0.1"
 
 val localProperties = Properties().apply {
-    load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+    try {
+        load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+    } catch (e: Throwable) {
+        logger.warn("local properties is not loaded")
+    }
 }
 
 repositories {
