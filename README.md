@@ -9,14 +9,14 @@ ktor-csrf-protection provides a Ktor feature for server application to protect c
 
 In build.gradle.kts
 
-```gradle
+```kotlin
 repositories {
     mavenCentral()
 }
 dependencies {
     implementation("io.github.hmiyado:ktor-csrf-protection:{version}")
 
-    # if you want to use CSRF Token with Ktor Sessions feature ( https://ktor.io/docs/sessions.html )
+    // if you want to use CSRF Token with Ktor Sessions feature ( https://ktor.io/docs/sessions.html )
     implementation("io.ktor:ktor-server-sessions:{version}")
 }
 ```
