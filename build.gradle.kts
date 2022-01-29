@@ -1,6 +1,3 @@
-import java.io.File
-import java.io.FileInputStream
-import java.util.*
 
 plugins {
     kotlin("jvm") version "1.6.10"
@@ -10,15 +7,7 @@ plugins {
 }
 
 group = "io.github.hmiyado"
-version = "0.1"
-
-val localProperties = Properties().apply {
-    try {
-        load(FileInputStream(File(rootProject.rootDir, "local.properties")))
-    } catch (e: Throwable) {
-        logger.warn("local properties is not loaded")
-    }
-}
+version = "0.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -94,8 +83,10 @@ publishing {
                     val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
                     url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
                     credentials {
-                        username = localProperties["ossrhUsername"].toString()
-                        password = localProperties["ossrhPassword"].toString()
+                        val ossrhUsername: String? by project
+                        val ossrhPassword: String? by project
+                        username = ossrhUsername
+                        password = ossrhPassword
                     }
                 }
             }
