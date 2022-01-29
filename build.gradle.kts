@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.hmiyado"
-version = "0.1-SNAPSHOT"
+version = "0.1"
 
 val localProperties = Properties().apply {
     load(FileInputStream(File(rootProject.rootDir, "local.properties")))
