@@ -71,7 +71,7 @@ publishing {
                 licenses {
                     license {
                         name.set("The MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
+                        url.set("https://github.com/hmiyado/ktor-csrf-protection/blob/main/LICENSE")
                     }
                 }
                 developers {
