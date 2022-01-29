@@ -25,8 +25,10 @@ dependencies {
 
 ```kotlin
 install(Sessions) {
-    // you can use any session, cookie or header and so on.
-    header<CsrfTokenSession>("X-CSRF-TOKEN", storage = SessionStorage())
+    // CSRF Token is bound to the client session.
+    cookie<ClientSession>()
+    // CSRF Token is handled as session.
+    header<CsrfTokenSession>("X-CSRF-TOKEN")
 }
 
 install(Csrf) {
