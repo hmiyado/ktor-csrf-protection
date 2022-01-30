@@ -21,7 +21,7 @@ application {
 }
 
 dependencies {
-    val ktorVersion = "1.6.7"
+    val ktorVersion: String by project
     implementation(rootProject)
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-sessions:$ktorVersion")

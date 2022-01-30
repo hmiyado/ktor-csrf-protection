@@ -37,15 +37,18 @@ val javadocJar by tasks.creating(Jar::class) {
 
 
 dependencies {
-    val ktorVersion = "1.6.7"
-    implementation("ch.qos.logback:logback-classic:1.2.1")
+    val ktorVersion:String by project
+    val logbackVersion: String by project
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-sessions:$ktorVersion")
-    val kotestVersion = "4.6.3"
-    val ktorAssertionVersion = "1.0.2"
+
+    val kotestVersion: String by project
+    val kotestKtorAssertionVersion: String by project
+    val mockkVersion:String by project
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
-    testImplementation("io.mockk:mockk:1.12.1")
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-    testImplementation("io.kotest.extensions:kotest-assertions-ktor:$ktorAssertionVersion")
+    testImplementation("io.kotest.extensions:kotest-assertions-ktor:$kotestKtorAssertionVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
 publishing {
