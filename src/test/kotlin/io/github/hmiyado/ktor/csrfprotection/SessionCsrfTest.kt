@@ -34,6 +34,7 @@ import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 
 private const val CLIENT_SESSION = "client_session"
+private const val X_CSRF_TOKEN = "X-CSRF-TOKEN"
 
 class SessionCsrfTest : DescribeSpec() {
 
@@ -58,7 +59,7 @@ class SessionCsrfTest : DescribeSpec() {
             application.install(Sessions) {
                 cookie<ClientSession>(CLIENT_SESSION, storage = sessionStorage) {
                 }
-                header<CsrfTokenSession>("X-CSRF-TOKEN", storage = sessionStorage) {
+                header<CsrfTokenSession>(X_CSRF_TOKEN, storage = sessionStorage) {
                 }
             }
             application.install(Csrf) {
@@ -79,7 +80,7 @@ class SessionCsrfTest : DescribeSpec() {
         clearAllMocks()
         runBlocking {
             sessionStorage.invalidate(CLIENT_SESSION)
-            sessionStorage.invalidate("X-CSRF-TOKEN")
+            sessionStorage.invalidate(X_CSRF_TOKEN)
         }
         testApplicationEngine.stop(0, 0)
     }
@@ -142,7 +143,7 @@ class SessionCsrfTest : DescribeSpec() {
                     }
                     install(Sessions) {
                         cookie<ClientSession>(CLIENT_SESSION, storage = sessionStorage) {}
-                        header<CsrfTokenSession>("X-CSRF-TOKEN", storage = sessionStorage) {}
+                        header<CsrfTokenSession>(X_CSRF_TOKEN, storage = sessionStorage) {}
                     }
                     install(Csrf) {
                         requestFilter { httpMethod, path ->
@@ -165,7 +166,7 @@ class SessionCsrfTest : DescribeSpec() {
                         }
                         post("/") {
                             // invalid csrf token
-                            addHeader("X-CSRF-TOKEN", "invalid_csrf_token")
+                            addHeader(X_CSRF_TOKEN, "invalid_csrf_token")
                         }.run {
                             response shouldHaveStatus HttpStatusCode.BadRequest
                         }
@@ -195,7 +196,7 @@ class SessionCsrfTest : DescribeSpec() {
                     }
                     install(Sessions) {
                         cookie<ClientSession>(CLIENT_SESSION, storage = sessionStorage) {}
-                        header<CsrfTokenSession>("X-CSRF-TOKEN", storage = sessionStorage) {}
+                        header<CsrfTokenSession>(X_CSRF_TOKEN, storage = sessionStorage) {}
                     }
                     install(Csrf) {
                         requestFilter { httpMethod, path ->
@@ -213,9 +214,9 @@ class SessionCsrfTest : DescribeSpec() {
                         }
                         val call = post("/") {}
                         call.response shouldHaveStatus HttpStatusCode.BadRequest
-                        val csrfToken = call.response.headers["X-CSRF-TOKEN"] ?: fail("no csrf token")
+                        val csrfToken = call.response.headers[X_CSRF_TOKEN] ?: fail("no csrf token")
                         post("/") {
-                            addHeader("X-CSRF-TOKEN", csrfToken)
+                            addHeader(X_CSRF_TOKEN, csrfToken)
                         }.run {
                             response shouldHaveStatus HttpStatusCode.OK
                         }
