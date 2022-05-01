@@ -24,13 +24,6 @@ import io.ktor.sessions.get
 import io.ktor.sessions.header
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
-import io.mockk.MockKAnnotations
-import io.mockk.Runs
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.just
-import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 
 private const val CLIENT_SESSION = "client_session"
@@ -40,14 +33,10 @@ class SessionCsrfTest : DescribeSpec() {
 
     lateinit var testApplicationEngine: TestApplicationEngine
 
-    @MockK
-    lateinit var onFailFunction: (CsrfTokenSession?) -> Unit
-
     private val sessionStorage: SessionStorageMemory = SessionStorageMemory()
 
     override fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
-        MockKAnnotations.init()
         testApplicationEngine = TestApplicationEngine().apply {
             start()
             application.install(Routing) {
@@ -67,9 +56,7 @@ class SessionCsrfTest : DescribeSpec() {
                     httpMethod == HttpMethod.Post && path == "/"
                 }
                 session<ClientSession> {
-                    onFail { token ->
-                        onFailFunction(token)
-                    }
+                    onFail { respond(HttpStatusCode.BadRequest) }
                 }
             }
         }
@@ -77,7 +64,6 @@ class SessionCsrfTest : DescribeSpec() {
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
         super.afterTest(testCase, result)
-        clearAllMocks()
         runBlocking {
             sessionStorage.invalidate(CLIENT_SESSION)
             sessionStorage.invalidate(X_CSRF_TOKEN)
@@ -86,8 +72,6 @@ class SessionCsrfTest : DescribeSpec() {
     }
 
     init {
-        MockKAnnotations.init(this)
-
         describe("request filter") {
             it("should not check csrf request that doesn't match HttpMethod") {
                 testApplicationEngine.get("/").run {
@@ -107,18 +91,16 @@ class SessionCsrfTest : DescribeSpec() {
         }
         describe("no or invalid client session, no or invalid csrf token") {
             it("should fail with no client session") {
-                every { onFailFunction(any()) } just Runs
-
-                testApplicationEngine.post("/")
-                verify { onFailFunction.invoke(null) }
+                testApplicationEngine.post("/").run {
+                    response shouldHaveStatus HttpStatusCode.BadRequest
+                }
             }
             it("should fail with no client session but only empty cookie") {
-                every { onFailFunction(any()) } just Runs
-
                 testApplicationEngine.post("/") {
                     addHeader("Cookie", "client_session=")
+                }.run {
+                    response shouldHaveStatus HttpStatusCode.BadRequest
                 }
-                verify { onFailFunction.invoke(null) }
             }
         }
         describe("valid client session, no or invalid csrf token") {
