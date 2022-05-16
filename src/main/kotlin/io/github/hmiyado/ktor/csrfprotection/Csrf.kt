@@ -1,11 +1,11 @@
 package io.github.hmiyado.ktor.csrfprotection
 
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.ApplicationFeature
-import io.ktor.application.call
 import io.ktor.http.HttpMethod
-import io.ktor.request.httpMethod
-import io.ktor.request.path
+import io.ktor.server.application.ApplicationCallPipeline
+import io.ktor.server.application.BaseApplicationPlugin
+import io.ktor.server.application.call
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.path
 import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelinePhase
 
@@ -16,7 +16,7 @@ class Csrf(configuration: Configuration) {
     fun intercept(
         pipeline: ApplicationCallPipeline,
     ) {
-        pipeline.insertPhaseAfter(ApplicationCallPipeline.Features, CsrfPhase)
+        pipeline.insertPhaseAfter(ApplicationCallPipeline.Plugins, CsrfPhase)
 
         pipeline.intercept(CsrfPhase) {
             val context = CsrfContext(call)
@@ -47,7 +47,7 @@ class Csrf(configuration: Configuration) {
         }
     }
 
-    companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, Csrf> {
+    companion object Plugin : BaseApplicationPlugin<ApplicationCallPipeline, Configuration, Csrf> {
         val CsrfPhase = PipelinePhase("Csrf")
 
         override val key: AttributeKey<Csrf>
@@ -55,11 +55,11 @@ class Csrf(configuration: Configuration) {
 
         override fun install(pipeline: ApplicationCallPipeline, configure: Configuration.() -> Unit): Csrf {
             val configuration = Configuration().apply(configure)
-            val feature = Csrf(configuration)
+            val plugin = Csrf(configuration)
 
-            feature.intercept(pipeline)
+            plugin.intercept(pipeline)
 
-            return feature
+            return plugin
         }
 
     }

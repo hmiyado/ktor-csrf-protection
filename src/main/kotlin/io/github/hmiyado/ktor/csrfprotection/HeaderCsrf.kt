@@ -1,8 +1,8 @@
 package io.github.hmiyado.ktor.csrfprotection
 
-import io.ktor.application.ApplicationCall
-import io.ktor.application.call
 import io.ktor.http.Headers
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.call
 
 private typealias CsrfHeaderValidatorFunction = (headers: Headers) -> Boolean
 private typealias HeaderCsrfOnFailFunction = suspend ApplicationCall.() -> Unit

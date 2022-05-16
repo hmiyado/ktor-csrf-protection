@@ -1,11 +1,11 @@
 package io.github.hmiyado.ktor.csrfprotection
 
-import io.ktor.application.ApplicationCall
-import io.ktor.application.call
-import io.ktor.sessions.clear
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.sessions.set
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.call
+import io.ktor.server.sessions.clear
+import io.ktor.server.sessions.get
+import io.ktor.server.sessions.sessions
+import io.ktor.server.sessions.set
 
 typealias CsrfOnFailFunction = suspend ApplicationCall.(CsrfTokenSession?) -> Unit
 
@@ -36,6 +36,7 @@ inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
     val logger = provider.logger
 
     provider.pipeline.intercept(CsrfPipeline.CheckCsrfToken) { context ->
+        logger.debug("start CheckCsrfToken")
         val clientSession = call.sessions.get<Client>()
         val tokenSession = call.sessions.get<CsrfTokenSession>()
         logger.debug("CheckCsrfToken clientRepresentation={}", clientSession?.representation)
@@ -49,7 +50,7 @@ inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
         if (tokenSession?.associatedClientRepresentation == clientSession.representation) {
             return@intercept
         }
-        val newTokenSession = CsrfTokenSession(clientSession)
+        val newTokenSession = CsrfTokenSession(clientSession.representation)
         logger.debug("CheckCsrfToken newToken={}", newTokenSession)
         call.sessions.clear<CsrfTokenSession>()
         call.sessions.set(newTokenSession)
