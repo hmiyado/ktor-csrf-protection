@@ -1,6 +1,6 @@
 package io.github.hmiyado.ktor.csrfprotection
 
-import io.ktor.application.ApplicationCall
+import io.ktor.server.application.ApplicationCall
 import kotlin.properties.Delegates
 
 class CsrfContext(

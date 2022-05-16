@@ -1,11 +1,11 @@
 package io.github.hmiyado.ktor.csrfprotection
 
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.ApplicationFeature
-import io.ktor.application.call
 import io.ktor.http.HttpMethod
-import io.ktor.request.httpMethod
-import io.ktor.request.path
+import io.ktor.server.application.ApplicationCallPipeline
+import io.ktor.server.application.BaseApplicationPlugin
+import io.ktor.server.application.call
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.path
 import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelinePhase
 
@@ -47,7 +47,7 @@ class Csrf(configuration: Configuration) {
         }
     }
 
-    companion object Feature : ApplicationFeature<ApplicationCallPipeline, Configuration, Csrf> {
+    companion object Feature : BaseApplicationPlugin<ApplicationCallPipeline, Configuration, Csrf> {
         val CsrfPhase = PipelinePhase("Csrf")
 
         override val key: AttributeKey<Csrf>
