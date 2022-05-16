@@ -50,7 +50,7 @@ inline fun <reified Client : CsrfTokenBoundClient> Csrf.Configuration.session(
         if (tokenSession?.associatedClientRepresentation == clientSession.representation) {
             return@intercept
         }
-        val newTokenSession = CsrfTokenSession(clientSession.representation,0,1)
+        val newTokenSession = CsrfTokenSession(clientSession.representation)
         logger.debug("CheckCsrfToken newToken={}", newTokenSession)
         call.sessions.clear<CsrfTokenSession>()
         call.sessions.set(newTokenSession)
@@ -65,12 +65,10 @@ interface CsrfTokenBoundClient {
     val representation: String
 }
 
-data class CsrfTokenSession(
+open class CsrfTokenSession(
     val associatedClientRepresentation: String,
-    val a: Int,
-    val b: Int,
 ) {
-//    constructor(client: CsrfTokenBoundClient) : this(client.representation)
+    constructor(client: CsrfTokenBoundClient) : this(client.representation)
 
     override fun toString(): String {
         return "CsrfTokenSession(associatedClient=$associatedClientRepresentation)"
