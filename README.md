@@ -1,6 +1,6 @@
 # ktor-csrf-protection
 
-ktor-csrf-protection provides a Ktor feature for server application to protect csrf by
+ktor-csrf-protection provides a Ktor plugin for server application to protect csrf by
 
 - using CSRF Token
 - verifying custom header
@@ -16,7 +16,7 @@ repositories {
 dependencies {
     implementation("io.github.hmiyado:ktor-csrf-protection:1.0.0")
 
-    // if you want to use CSRF Token with Ktor Sessions feature ( https://ktor.io/docs/sessions.html )
+    // if you want to use CSRF Token with Ktor Sessions plugin ( https://ktor.io/docs/sessions.html )
     implementation("io.ktor:ktor-server-sessions:$version")
 }
 ```
@@ -43,7 +43,7 @@ install(Csrf) {
         // specify request that csrf protection should be valid
         path == "/protected" && httpMethod in listOf(HttpMethod.Post)
     }
-    // use csrf token with Ktor Sessions feature
+    // use csrf token with Ktor Sessions plugin
     session<ClientSession> {
         onFail { respond(HttpStatusCode.Forbidden) }
     }
