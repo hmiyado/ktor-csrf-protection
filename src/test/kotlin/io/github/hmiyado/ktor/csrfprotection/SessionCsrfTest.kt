@@ -37,7 +37,7 @@ class SessionCsrfTest : DescribeSpec() {
 
     private val sessionStorage: SessionStorageMemory = SessionStorageMemory()
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
         testApplicationEngine = TestApplicationEngine().apply {
             start()
@@ -64,7 +64,7 @@ class SessionCsrfTest : DescribeSpec() {
         }
     }
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
         super.afterTest(testCase, result)
         runBlocking {
             sessionStorage.invalidate(CLIENT_SESSION)

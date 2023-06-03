@@ -26,7 +26,7 @@ class HeaderCsrfProviderTest : DescribeSpec() {
     @MockK
     lateinit var onFailFunction: () -> Unit
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
         MockKAnnotations.init()
         testApplicationEngine = TestApplicationEngine().apply {
@@ -48,7 +48,7 @@ class HeaderCsrfProviderTest : DescribeSpec() {
 
     }
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
         super.afterTest(testCase, result)
         clearAllMocks()
     }
