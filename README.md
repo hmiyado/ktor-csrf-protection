@@ -14,7 +14,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation("io.github.hmiyado:ktor-csrf-protection:2.0.0")
+    implementation("io.github.hmiyado:ktor-csrf-protection:2.0.1")
 
     // if you want to use CSRF Token with Ktor Sessions plugin ( https://ktor.io/docs/sessions.html )
     implementation("io.ktor:ktor-server-sessions:$version")
